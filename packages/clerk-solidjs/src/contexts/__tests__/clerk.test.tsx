@@ -140,12 +140,12 @@ describe('ClerkProvider', () => {
       expectTypeOf({
         ...defaultProps,
         appearance: { variables: { nonExistentKey: '' } }
-      }).not.toMatchTypeOf<ClerkProviderProps>();
+      } as any).not.toMatchTypeOf<ClerkProviderProps>(null as any);
 
       expectTypeOf({
         ...defaultProps,
         appearance: { layout: { nonExistentKey: '' } }
-      }).not.toMatchTypeOf<ClerkProviderProps>();
+      } as any).not.toMatchTypeOf<ClerkProviderProps>(null as any);
 
       // expectTypeOf({
       //   ...defaultProps,
@@ -276,7 +276,7 @@ describe('ClerkProvider', () => {
         children: '',
         routerPush: () => {},
         routerReplace: () => {}
-      }).toMatchTypeOf<ClerkProviderProps>();
+      } as ClerkProviderProps).toMatchTypeOf<ClerkProviderProps>();
     });
 
     it('errors if one of routerPush / routerReplace is passed', () => {
@@ -284,7 +284,7 @@ describe('ClerkProvider', () => {
         publishableKey: 'test',
         children: '',
         routerPush: () => {}
-      }).not.toMatchTypeOf<ClerkProviderProps>();
+      } as any).not.toMatchTypeOf<ClerkProviderProps>(null as any);
     });
   });
 });

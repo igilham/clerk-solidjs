@@ -1,9 +1,14 @@
 import { afterAll, beforeAll, describe, expect, it, vitest } from 'vitest';
 import { IsomorphicClerk } from '../isomorphic-clerk';
 
+vitest.mock('@clerk/shared/loadClerkJsScript', () => ({
+  loadClerkJsScript: vitest.fn().mockResolvedValue(undefined)
+}));
+
 describe('isomorphicClerk', () => {
   beforeAll(() => {
     vitest.useFakeTimers();
+    (globalThis as any).Clerk = { load: vitest.fn().mockResolvedValue(undefined) };
   });
 
   afterAll(() => {

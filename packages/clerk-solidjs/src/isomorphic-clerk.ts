@@ -2,8 +2,6 @@ import { inBrowser } from '@clerk/shared/browser';
 import { loadClerkJsScript } from '@clerk/shared/loadClerkJsScript';
 import { handleValueOrFn } from '@clerk/shared/utils';
 import type {
-  __experimental_CommerceNamespace,
-  __experimental_PricingTableProps,
   __internal_UserVerificationModalProps,
   __internal_UserVerificationProps,
   AuthenticateWithCoinbaseWalletParams,
@@ -23,7 +21,6 @@ import type {
   JoinWaitlistParams,
   ListenerCallback,
   LoadedClerk,
-  NextTaskParams,
   OrganizationListProps,
   OrganizationProfileProps,
   OrganizationResource,
@@ -42,7 +39,7 @@ import type {
   WaitlistProps,
   WaitlistResource,
   Without
-} from '@clerk/types';
+} from '@clerk/shared/types';
 
 import { errorThrower } from './errors/error-thrower';
 import { unsupportedNonBrowserDomainOrProxyUrlFunction } from './errors/messages';
@@ -98,14 +95,12 @@ type IsomorphicLoadedClerk = Without<
   | '__internal_addNavigationListener'
   | '__internal_getCachedResources'
   | '__internal_reloadInitialResources'
-  | '__experimental_commerce'
   | '__internal_setComponentNavigationContext'
 > & {
   client: ClientResource | undefined;
-  __experimental_commerce: __experimental_CommerceNamespace | undefined;
 };
 
-export class IsomorphicClerk implements IsomorphicLoadedClerk {
+export class IsomorphicClerk {
   private readonly mode: 'browser' | 'server';
   private readonly options: IsomorphicClerkOptions;
   private readonly Clerk: ClerkProp;
@@ -158,10 +153,6 @@ export class IsomorphicClerk implements IsomorphicLoadedClerk {
   private premountWaitlistNodes = new Map<
     HTMLDivElement,
     WaitlistProps | undefined
-  >();
-  private premountPricingTableNodes = new Map<
-    HTMLDivElement,
-    __experimental_PricingTableProps | undefined
   >();
   // A separate Map of `addListener` method calls to handle multiple listeners.
   private premountAddListenerCalls = new Map<
@@ -252,7 +243,7 @@ export class IsomorphicClerk implements IsomorphicLoadedClerk {
       this.options.sdkMetadata = SDK_METADATA;
     }
 
-    if (this.#publishableKey) {
+    if (this.#publishableKey && this.mode === 'browser') {
       void this.loadClerkJS();
     }
   }
@@ -587,10 +578,6 @@ export class IsomorphicClerk implements IsomorphicLoadedClerk {
       clerkjs.mountWaitlist(node, props);
     });
 
-    this.premountPricingTableNodes.forEach((props, node) => {
-      clerkjs.__experimental_mountPricingTable(node, props);
-    });
-
     this.#loaded = true;
     this.emitLoaded();
     return this.clerkjs;
@@ -658,8 +645,8 @@ export class IsomorphicClerk implements IsomorphicLoadedClerk {
     }
   }
 
-  get __experimental_commerce(): __experimental_CommerceNamespace | undefined {
-    return this.clerkjs?.__experimental_commerce;
+  get __experimental_commerce(): any {
+    return (this.clerkjs as any)?.__experimental_commerce;
   }
 
   __unstable__setEnvironment(...args: any): void {
@@ -678,9 +665,9 @@ export class IsomorphicClerk implements IsomorphicLoadedClerk {
     }
   };
 
-  __experimental_nextTask = async (params?: NextTaskParams): Promise<void> => {
-    if (this.clerkjs) {
-      return this.clerkjs.__experimental_nextTask(params);
+  __experimental_nextTask = async (params?: any): Promise<void> => {
+    if (this.clerkjs && (this.clerkjs as any).__experimental_nextTask) {
+      return (this.clerkjs as any).__experimental_nextTask(params);
     } else {
       return Promise.reject();
     }
@@ -843,24 +830,6 @@ export class IsomorphicClerk implements IsomorphicLoadedClerk {
     }
   };
 
-  __experimental_mountPricingTable = (
-    node: HTMLDivElement,
-    props?: __experimental_PricingTableProps
-  ) => {
-    if (this.clerkjs && this.#loaded) {
-      this.clerkjs.__experimental_mountPricingTable(node, props);
-    } else {
-      this.premountPricingTableNodes.set(node, props);
-    }
-  };
-
-  __experimental_unmountPricingTable = (node: HTMLDivElement) => {
-    if (this.clerkjs && this.#loaded) {
-      this.clerkjs.__experimental_unmountPricingTable(node);
-    } else {
-      this.premountPricingTableNodes.delete(node);
-    }
-  };
 
   mountSignUp = (node: HTMLDivElement, props?: SignUpProps) => {
     if (this.clerkjs && this.#loaded) {

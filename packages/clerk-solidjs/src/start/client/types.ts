@@ -1,4 +1,4 @@
-import type { InitialState, Without } from '@clerk/types';
+import type { InitialState, Without } from '@clerk/shared/types';
 import type { JSX } from 'solid-js';
 import type { ClerkProviderProps } from '../../types';
 
@@ -14,6 +14,10 @@ export type ClerkState = {
     __signUpUrl: string | undefined;
     __afterSignInUrl: string | undefined;
     __afterSignUpUrl: string | undefined;
+    __signInFallbackRedirectUrl: string | undefined;
+    __signUpFallbackRedirectUrl: string | undefined;
+    __signInForceRedirectUrl: string | undefined;
+    __signUpForceRedirectUrl: string | undefined;
     __clerk_debug: any;
     __clerkJSUrl: string | undefined;
     __clerkJSVersion: string | undefined;
@@ -27,5 +31,11 @@ export type SolidStartClerkProviderProps = Without<
   'publishableKey' | 'initialState'
 > & {
   publishableKey?: string;
+  afterSignInUrl?: string;
+  afterSignUpUrl?: string;
+  signInFallbackRedirectUrl?: string;
+  signUpFallbackRedirectUrl?: string;
+  signInForceRedirectUrl?: string;
+  signUpForceRedirectUrl?: string;
   children: JSX.Element;
 };

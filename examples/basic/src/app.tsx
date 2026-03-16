@@ -1,5 +1,6 @@
 import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
+// @ts-ignore
 import { ClerkProvider } from "clerk-solidjs/start";
 import { Suspense } from "solid-js/web";
 

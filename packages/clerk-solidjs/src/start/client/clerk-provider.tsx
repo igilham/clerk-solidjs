@@ -14,7 +14,7 @@ export function ClerkProvider(
 
   const clerkInitState = () =>
     isServer
-      ? getRequestEvent()?.locals.clerkInitialState
+      ? (getRequestEvent() as any)?.locals.clerkInitialState
       : (window as any).__clerk_init_state;
 
   const states = createMemo(() =>

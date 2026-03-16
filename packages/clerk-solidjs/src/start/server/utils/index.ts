@@ -1,5 +1,5 @@
 import { debugRequestState, RequestState } from '@clerk/backend/internal';
-import { isTruthy } from '@clerk/shared';
+import { isTruthy } from '@clerk/shared/underscore';
 import { getEnvVariable } from '../../utils/env';
 import { AdditionalStateOptions } from '../types';
 
@@ -32,27 +32,15 @@ export function getResponseClerkState(
     __signUpUrl: requestState.signUpUrl,
     __afterSignInUrl: requestState.afterSignInUrl,
     __afterSignUpUrl: requestState.afterSignUpUrl,
+    __signInFallbackRedirectUrl: (requestState as any).signInFallbackRedirectUrl,
+    __signUpFallbackRedirectUrl: (requestState as any).signUpFallbackRedirectUrl,
+    __signInForceRedirectUrl: (requestState as any).signInForceRedirectUrl,
+    __signUpForceRedirectUrl: (requestState as any).signUpForceRedirectUrl,
     __clerk_debug: debugRequestState(requestState),
     __clerkJSUrl: getEnvVariable('CLERK_JS'),
     __clerkJSVersion: getEnvVariable('CLERK_JS_VERSION'),
     __telemetryDisabled: isTruthy(getEnvVariable('CLERK_TELEMETRY_DISABLED')),
     __telemetryDebug: isTruthy(getEnvVariable('CLERK_TELEMETRY_DEBUG')),
-    __signInForceRedirectUrl:
-      additionalStateOptions.signInForceRedirectUrl ||
-      getEnvVariable('CLERK_SIGN_IN_FORCE_REDIRECT_URL') ||
-      '',
-    __signUpForceRedirectUrl:
-      additionalStateOptions.signUpForceRedirectUrl ||
-      getEnvVariable('CLERK_SIGN_UP_FORCE_REDIRECT_URL') ||
-      '',
-    __signInFallbackRedirectUrl:
-      additionalStateOptions.signInFallbackRedirectUrl ||
-      getEnvVariable('CLERK_SIGN_IN_FALLBACK_REDIRECT_URL') ||
-      '',
-    __signUpFallbackRedirectUrl:
-      additionalStateOptions.signUpFallbackRedirectUrl ||
-      getEnvVariable('CLERK_SIGN_UP_FALLBACK_REDIRECT_URL') ||
-      ''
   });
 
   return {
