@@ -41,8 +41,8 @@ export const clerkMiddleware = (
       const loadedOptions = loadOptions(request, options);
       const requestState = await authenticateRequest(request, loadedOptions);
       const state = getResponseClerkState(requestState, loadedOptions);
-      locals.auth = stripPrivateDataFromObject(requestState.toAuth());
-      locals.clerkInitialState = state.clerkInitialState;
+      (locals as any).auth = stripPrivateDataFromObject(requestState.toAuth());
+      (locals as any).clerkInitialState = state.clerkInitialState;
     } catch (error) {
       if (error instanceof Response) {
         return error;

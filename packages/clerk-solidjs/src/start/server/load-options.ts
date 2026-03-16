@@ -1,11 +1,8 @@
 import { createClerkRequest } from '@clerk/backend/internal';
-import {
-  apiUrlFromPublishableKey,
-  handleValueOrFn,
-  isDevelopmentFromSecretKey,
-  isHttpOrHttps,
-  isProxyUrlRelative
-} from '@clerk/shared';
+import { apiUrlFromPublishableKey } from '@clerk/shared/apiUrlFromPublishableKey';
+import { isDevelopmentFromSecretKey } from '@clerk/shared/keys';
+import { isHttpOrHttps, isProxyUrlRelative } from '@clerk/shared/proxy';
+import { handleValueOrFn } from '@clerk/shared/utils';
 
 import { errorThrower } from '../../errors/error-thrower';
 import { getEnvVariable, getPublicEnvVariables } from '../utils/env';
@@ -49,6 +46,18 @@ export const loadOptions = (
     overrides.afterSignInUrl || getPublicEnvVariables().afterSignInUrl;
   const afterSignUpUrl =
     overrides.afterSignUpUrl || getPublicEnvVariables().afterSignUpUrl;
+  const signInFallbackRedirectUrl =
+    overrides.signInFallbackRedirectUrl ||
+    getPublicEnvVariables().signInFallbackRedirectUrl;
+  const signUpFallbackRedirectUrl =
+    overrides.signUpFallbackRedirectUrl ||
+    getPublicEnvVariables().signUpFallbackRedirectUrl;
+  const signInForceRedirectUrl =
+    overrides.signInForceRedirectUrl ||
+    getPublicEnvVariables().signInForceRedirectUrl;
+  const signUpForceRedirectUrl =
+    overrides.signUpForceRedirectUrl ||
+    getPublicEnvVariables().signUpForceRedirectUrl;
 
   let proxyUrl;
   if (
@@ -96,6 +105,10 @@ export const loadOptions = (
     signInUrl,
     signUpUrl,
     afterSignInUrl,
-    afterSignUpUrl
+    afterSignUpUrl,
+    signInFallbackRedirectUrl,
+    signUpFallbackRedirectUrl,
+    signInForceRedirectUrl,
+    signUpForceRedirectUrl
   };
 };

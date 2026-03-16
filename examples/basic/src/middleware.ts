@@ -1,4 +1,5 @@
 import { createMiddleware } from "@solidjs/start/middleware";
+// @ts-ignore
 import { clerkMiddleware } from "clerk-solidjs/start/server";
 
 export default createMiddleware({

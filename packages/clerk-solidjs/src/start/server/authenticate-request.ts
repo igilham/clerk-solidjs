@@ -1,30 +1,31 @@
 import { createClerkClient } from '@clerk/backend';
-import type {
-  AuthenticateRequestOptions,
-  SignedInState,
-  SignedOutState
-} from '@clerk/backend/internal';
 import { AuthStatus } from '@clerk/backend/internal';
 
 import { errorThrower } from '../../errors/error-thrower';
+import { LoaderOptions } from './types';
 import { patchRequest } from './utils';
 
 export async function authenticateRequest(
   request: Request,
-  opts: AuthenticateRequestOptions
-): Promise<SignedInState | SignedOutState> {
+  opts: LoaderOptions
+): Promise<any> {
   const { audience, authorizedParties } = opts;
 
+  const { secretKey, jwtKey, publishableKey } = opts;
+  const apiUrl = opts.apiUrl as string;
+  const domain = opts.domain as string;
+  const isSatellite = opts.isSatellite as boolean;
+  const proxyUrl = opts.proxyUrl as string;
   const {
-    apiUrl,
-    secretKey,
-    jwtKey,
-    proxyUrl,
-    isSatellite,
-    domain,
-    publishableKey
+    signInUrl,
+    signUpUrl,
+    afterSignInUrl,
+    afterSignUpUrl,
+    signInFallbackRedirectUrl,
+    signUpFallbackRedirectUrl,
+    signInForceRedirectUrl,
+    signUpForceRedirectUrl
   } = opts;
-  const { signInUrl, signUpUrl, afterSignInUrl, afterSignUpUrl } = opts;
 
   const requestState = await createClerkClient({
     apiUrl,
@@ -41,8 +42,12 @@ export async function authenticateRequest(
     signInUrl,
     signUpUrl,
     afterSignInUrl,
-    afterSignUpUrl
-  });
+    afterSignUpUrl,
+    signInFallbackRedirectUrl,
+    signUpFallbackRedirectUrl,
+    signInForceRedirectUrl,
+    signUpForceRedirectUrl
+  } as any);
 
   const hasLocationHeader = requestState.headers.get('location');
   if (hasLocationHeader) {

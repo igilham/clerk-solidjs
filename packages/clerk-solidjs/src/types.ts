@@ -14,7 +14,7 @@ import type {
   SignUpProps,
   SignUpRedirectOptions,
   Without
-} from '@clerk/types';
+} from '@clerk/shared/types';
 import { Accessor, JSX, JSXElement } from 'solid-js';
 
 declare global {

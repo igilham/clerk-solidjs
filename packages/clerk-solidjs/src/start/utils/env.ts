@@ -77,6 +77,18 @@ export const getPublicEnvVariables = () => {
       getEnvVariable('CLERK_AFTER_SIGN_IN_URL'),
     afterSignUpUrl:
       getEnvVariable('VITE_CLERK_AFTER_SIGN_UP_URL') ||
-      getEnvVariable('CLERK_AFTER_SIGN_UP_URL')
+      getEnvVariable('CLERK_AFTER_SIGN_UP_URL'),
+    signInFallbackRedirectUrl:
+      getEnvVariable('VITE_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL') ||
+      getEnvVariable('CLERK_SIGN_IN_FALLBACK_REDIRECT_URL'),
+    signUpFallbackRedirectUrl:
+      getEnvVariable('VITE_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL') ||
+      getEnvVariable('CLERK_SIGN_UP_FALLBACK_REDIRECT_URL'),
+    signInForceRedirectUrl:
+      getEnvVariable('VITE_CLERK_SIGN_IN_FORCE_REDIRECT_URL') ||
+      getEnvVariable('CLERK_SIGN_IN_FORCE_REDIRECT_URL'),
+    signUpForceRedirectUrl:
+      getEnvVariable('VITE_CLERK_SIGN_UP_FORCE_REDIRECT_URL') ||
+      getEnvVariable('CLERK_SIGN_UP_FORCE_REDIRECT_URL')
   };
 };
